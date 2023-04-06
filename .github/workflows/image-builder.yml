@@ -9,9 +9,9 @@ jobs:
   deploy-to-dev:
     name: "Deploy to dev"
     runs-on: self-hosted
-    environment: dev
     env:
       ENVIRONMENT: dev
+    environment: dev
     permissions:
       contents: read
       id-token: write
@@ -23,7 +23,7 @@ jobs:
           method: jwt
           url: http://127.0.0.1:8200
           tlsSkipVerify: true
-          role: demo_app
+          role: demo_app_${{ env.ENVIRONMENT }}
           secrets: |
             secret/data/${{ github.repository }}/${{ env.ENVIRONMENT }} app_secret
       - name: Build Docker Image
@@ -32,10 +32,10 @@ jobs:
   deploy-to-test:
     name: "Deploy to test"
     runs-on: self-hosted
-    environment: test
-    needs: deploy-to-dev
     env:
       ENVIRONMENT: test
+    environment: test
+    needs: deploy-to-dev
     permissions:
       contents: read
       id-token: write
@@ -47,7 +47,7 @@ jobs:
           method: jwt
           url: http://127.0.0.1:8200
           tlsSkipVerify: true
-          role: demo_app
+          role: demo_app_${{ env.ENVIRONMENT }}
           secrets: |
             secret/data/${{ github.repository }}/${{ env.ENVIRONMENT }} app_secret
       - name: Build Docker Image
@@ -56,10 +56,10 @@ jobs:
   deploy-to-prod:
     name: "Deploy to prod"
     runs-on: self-hosted
-    environment: prod
     needs: deploy-to-test
     env:
       ENVIRONMENT: prod
+    environment: prod
     permissions:
       contents: read
       id-token: write
@@ -71,7 +71,7 @@ jobs:
           method: jwt
           url: http://127.0.0.1:8200
           tlsSkipVerify: true
-          role: demo_app
+          role: demo_app_${{ env.ENVIRONMENT }}
           secrets: |
             secret/data/${{ github.repository }}/${{ env.ENVIRONMENT }} app_secret
       - name: Build Docker Image
