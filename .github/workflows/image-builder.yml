@@ -23,9 +23,9 @@ jobs:
           method: jwt
           url: http://127.0.0.1:8200
           tlsSkipVerify: true
-          role: demo_app_test
+          role: demo_app_${{ env.ENVIRONMENT }}
           secrets: |
-            secret/data/${{ github.repository }}/${{ env.ENVIRONMENT }} app_secret
+            secret/data/${{ github.repository }}/test app_secret
       - name: Build Docker Image
         run: docker build . --file Dockerfile --build-arg app_secret="${{ env.APP_SECRET }}" -t vault-action-exampleapp
       
