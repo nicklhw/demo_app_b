@@ -23,7 +23,7 @@ jobs:
           method: jwt
           url: http://127.0.0.1:8200
           tlsSkipVerify: true
-          role: demo_app_${{ env.ENVIRONMENT }}
+          role: demo_app_test
           secrets: |
             secret/data/${{ github.repository }}/${{ env.ENVIRONMENT }} app_secret
       - name: Build Docker Image
